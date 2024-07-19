@@ -5,9 +5,9 @@ import Add from "./pages/Add/Add";
 import List from "./pages/List/List";
 import Orders from "./pages/Orders/Orders";
 import { Toaster } from "react-hot-toast";
+import { url } from "./assets/assets";
 
 const App = () => {
-  const url = "https://food-fs-backend.onrender.com";
   return (
     <div>
       <Navbar />

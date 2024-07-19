@@ -6,7 +6,6 @@ import { assets } from "./../../assets/assets";
 const FoodItem = ({ id, name, description, price, image }) => {
   const { cartItems, addToCart, removeFromCart, url } =
     useContext(StoreContext);
-
   return (
     <div className="food-item">
       <div className="food-item-img-container">
