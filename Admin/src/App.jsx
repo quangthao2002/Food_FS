@@ -7,7 +7,7 @@ import Orders from "./pages/Orders/Orders";
 import { Toaster } from "react-hot-toast";
 
 const App = () => {
-  const url = "http://localhost:3000";
+  const url = "https://food-fs-backend.onrender.com";
   return (
     <div>
       <Navbar />
