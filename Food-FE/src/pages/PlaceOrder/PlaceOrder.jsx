@@ -1,11 +1,14 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { StoreContext } from "../../context/StoreContext";
 import "./PlaceOrder.css";
 import axios from "axios";
+import { assets } from "./../../assets/assets";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 function PlaceOrder() {
-  const navigate = useNavigate();
+  const [isSelect, setIsSelect] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("cod");
   const { getTotalCartAmount, token, foodList, cartItems, url } =
     useContext(StoreContext);
   const [dataUser, setDataUser] = useState({
@@ -19,6 +22,7 @@ function PlaceOrder() {
     country: "",
     phone: "",
   });
+  const navigate = useNavigate();
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
     setDataUser({ ...dataUser, [name]: value });
@@ -37,17 +41,21 @@ function PlaceOrder() {
       items: orderItems,
       address: dataUser,
       amount: getTotalCartAmount() + 2,
+      paymentMethod,
     };
     const response = await axios.post(
       `${url}/api/order/placeOrder`,
       orderData,
       { headers: { token } }
     );
-    if (response.data.success) {
+    if (response.data.paymentMethod === "stripe") {
       const { session_url } = response.data;
       window.location.replace(session_url);
+    } else if (response.data.paymentMethod === "cod") {
+      navigate("/myOrders");
+      toast.success("Order success");
     } else {
-      alert("Order failed");
+      toast.success("Order fail");
     }
   };
 
@@ -155,8 +163,36 @@ function PlaceOrder() {
               </b>
             </div>
           </div>
-          <button type="submit">PROCEED TO PAYMENT</button>
         </div>
+        <div className="payment-method">
+          <h2>Payment Method</h2>
+          <div className={`payment-option`} onClick={() => setIsSelect(false)}>
+            <button
+              className={`${!isSelect ? "selected" : ""}`}
+              onClick={() => {
+                setPaymentMethod("cod");
+              }}
+            >
+              {" "}
+              <img src={assets.selector_icon} />
+              COD (Cash on delivery)
+            </button>
+          </div>
+          <div className={`payment-option`} onClick={() => setIsSelect(true)}>
+            <button
+              className={`${isSelect ? "selected" : ""}`}
+              onClick={() => {
+                setPaymentMethod("stripe");
+              }}
+            >
+              <img className="payment-stripe" src={assets.selector_icon} />
+              Stripe Payment
+            </button>
+          </div>
+        </div>
+        <button className="place-order" type="submit">
+          Place Order
+        </button>
       </div>
     </form>
   );

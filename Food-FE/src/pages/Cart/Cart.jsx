@@ -14,7 +14,6 @@ const Cart = () => {
 
   const navigate = useNavigate();
   const isCheckoutEnabled = getTotalCartAmount() > 0 && token;
-  console.log(isCheckoutEnabled);
   return (
     <div className="cart">
       <div className="cart-items-title">

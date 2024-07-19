@@ -8,50 +8,64 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // placing user
 const placeOrder = async (req, res) => {
   const exchange_rate = 25000;
-  let total = 0;
   try {
     const newOrder = new orderModel({
       userId: req.body.userId,
       items: req.body.items,
       amount: req.body.amount,
       address: req.body.address,
+      paymentMethod: req.body.paymentMethod,
     });
     await newOrder.save();
     await userModel.findByIdAndUpdate(req.body.userId, { cartData: {} });
-    let totalQuantity = 0;
-    const line_items = req.body.items.map((item) => {
-      total += item.quantity;
-      return {
+    if (req.body.paymentMethod === "stripe") {
+      const line_items = req.body.items.map((item) => {
+        return {
+          price_data: {
+            currency: "vnd",
+            product_data: {
+              name: item.name,
+            },
+            unit_amount: item.price * exchange_rate,
+          },
+          quantity: item.quantity,
+        };
+      });
+
+      // add price delivery charge
+      line_items.push({
         price_data: {
           currency: "vnd",
           product_data: {
-            name: item.name,
+            name: "Delivery Charge",
           },
-          unit_amount: item.price * exchange_rate,
+          unit_amount: 2 * exchange_rate,
         },
-        quantity: item.quantity,
-      };
-    });
-    console.log(total);
-    // add price delivery charge
-    line_items.push({
-      price_data: {
-        currency: "vnd",
-        product_data: {
-          name: "Delivery Charge",
-        },
-        unit_amount: 2 * exchange_rate,
-      },
-      quantity: 1,
-    });
-    const session = await stripe.checkout.sessions.create({
-      //   payment_method_types: ["card"],
-      line_items,
-      mode: "payment",
-      success_url: `${process.env.CLIENT_URL}/verify?success=true&orderId=${newOrder._id}`,
-      cancel_url: `${process.env.CLIENT_URL}/verify?success=false&orderId=${newOrder._id}`,
-    });
-    res.status(200).json({ success: true, session_url: session.url });
+        quantity: 1,
+      });
+      const session = await stripe.checkout.sessions.create({
+        //   payment_method_types: ["card"],
+        line_items,
+        mode: "payment",
+        success_url: `${process.env.CLIENT_URL}/verify?success=true&orderId=${newOrder._id}`,
+        cancel_url: `${process.env.CLIENT_URL}/verify?success=false&orderId=${newOrder._id}`,
+      });
+      res.status(200).json({
+        success: true,
+        session_url: session.url,
+        paymentMethod: "stripe",
+      });
+    } else if (req.body.paymentMethod === "cod") {
+      res.status(200).json({
+        success: true,
+        message: "Order placed with COD",
+        paymentMethod: "cod",
+      });
+    } else {
+      res
+        .status(400)
+        .json({ success: false, message: "Payment method not found" });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: error.message });

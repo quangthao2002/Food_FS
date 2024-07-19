@@ -3,6 +3,7 @@ import { useContext, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { StoreContext } from "../../context/StoreContext";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 const Verify = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const success = searchParams.get("success");
@@ -15,6 +16,7 @@ const Verify = () => {
       success,
     });
     if (response.data.success) {
+      toast.success("Order success");
       navigate("/myOrders");
     } else {
       navigate("/");
