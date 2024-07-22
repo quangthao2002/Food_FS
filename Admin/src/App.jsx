@@ -6,6 +6,7 @@ import List from "./pages/List/List";
 import Orders from "./pages/Orders/Orders";
 import { Toaster } from "react-hot-toast";
 import { url } from "./assets/assets";
+import Update from "./pages/Update/Update";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/add" element={<Add url={url} />} />
           <Route path="/list" element={<List url={url} />} />
           <Route path="/orders" element={<Orders url={url} />} />
+          <Route path="/update/:id" element={<Update url={url} />} />
         </Routes>
       </div>
       <Toaster />

@@ -53,7 +53,6 @@ function PlaceOrder() {
       window.location.replace(session_url);
     } else if (response.data.paymentMethod === "cod") {
       navigate("/myOrders");
-      toast.success("Order success");
     } else {
       toast.success("Order fail");
     }

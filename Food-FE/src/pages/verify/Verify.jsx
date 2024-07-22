@@ -16,8 +16,8 @@ const Verify = () => {
       success,
     });
     if (response.data.success) {
-      toast.success("Order success");
       navigate("/myOrders");
+      toast.success("Order success");
     } else {
       navigate("/");
     }
