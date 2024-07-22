@@ -18,4 +18,4 @@ export const assets = {
   delete_icon,
 };
 
-export const url = "https://food-fs-backend.onrender.com";
+export const url = "http://localhost:3000";

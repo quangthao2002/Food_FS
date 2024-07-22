@@ -55,7 +55,7 @@ const List = ({ url }) => {
         {listFood.map((item, index) => {
           return (
             <div className="list-table-format" key={index}>
-              <img src={`${url}/images/` + item.image} alt="" />
+              <img src={item.image} alt="" />
               <p>{item.name}</p>
               <p>{item.category}</p>
               <p>{item.price}</p>

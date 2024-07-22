@@ -10,6 +10,7 @@ import { assets } from "../../assets/assets";
 const Update = ({ url }) => {
   const { id } = useParams();
   const [image, setImage] = useState(null);
+  console.log(image);
   const [data, setData] = useState({
     name: "",
     description: "",
@@ -24,7 +25,6 @@ const Update = ({ url }) => {
   const getFood = async () => {
     try {
       const response = await axios.get(`${url}/api/food/getfood/${id}`);
-      console.log(response.data.data);
       setData(response.data.data);
     } catch (error) {
       console.log(error);
@@ -72,7 +72,7 @@ const Update = ({ url }) => {
               src={
                 image
                   ? URL.createObjectURL(image)
-                  : `${url}/images/${data.image}` || assets.upload_area
+                  : data.image || assets.upload_area
               }
               alt=""
             />

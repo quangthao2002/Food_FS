@@ -18,7 +18,6 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.send("API working");
 });
-app.use("/images", express.static("uploads"));
 // db connection
 connectDB();
 

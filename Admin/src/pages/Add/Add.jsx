@@ -46,7 +46,12 @@ const Add = ({ url }) => {
   };
   return (
     <div className="add">
-      <form className="flex-col" onSubmit={onSubmitHandler} action="">
+      <form
+        className="flex-col"
+        onSubmit={onSubmitHandler}
+        action=""
+        encType="multipart/form-data"
+      >
         <div className="add-img-upload flex-col">
           <p>Upload Image</p>
           <label htmlFor="image">

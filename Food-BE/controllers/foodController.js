@@ -4,13 +4,13 @@ import fs from "fs";
 // add food item
 
 const addFood = async (req, res) => {
-  let image_filename = `${req.file.filename}`;
+  let image_url = req.file.location; //URL cua anh tren s3
   const food = new foodModel({
     name: req.body.name,
     description: req.body.description,
     category: req.body.category,
     price: req.body.price,
-    image: image_filename,
+    image: image_url,
   });
   try {
     await food.save();
@@ -24,16 +24,22 @@ const addFood = async (req, res) => {
 // update food item
 const updateFood = async (req, res) => {
   const { id } = req.params;
-  const food = await foodModel.find({ _id: id });
 
-  let image_filename = food.image; // nếu không thay đổi sử dụng lại image cũ
-  if (req.file) {
-    fs.unlinkSync(`uploads/${food.image}`);
-    image_filename = req.file.filename;
-  }
   try {
     const food = await foodModel.findOne({ _id: id });
-    fs.unlinkSync(`uploads/${food.image}`);
+    let image_url = food.image; // nếu không thay đổi sử dụng lại image cũ
+    if (req.file) {
+      // Xóa ảnh cũ trên S3 nếu cần
+      const oldImageKey = food.image.split("/").pop();
+      await s3
+        .deleteObject({
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Key: oldImageKey,
+        })
+        .promise();
+
+      image_url = req.file.location; // URL của ảnh mới trên S3
+    }
     await foodModel.findOneAndUpdate(
       { _id: id },
       {
@@ -41,7 +47,7 @@ const updateFood = async (req, res) => {
         description: req.body.description,
         category: req.body.category,
         price: req.body.price,
-        image: image_filename,
+        image: image_url,
       }
     );
     res.json({ result: "Success", message: "Food Updated" });
@@ -54,8 +60,6 @@ const updateFood = async (req, res) => {
 const removeFood = async (req, res) => {
   const { id } = req.params;
   try {
-    const food = await foodModel.findOne({ _id: id });
-    fs.unlinkSync(`uploads/${food.image}`);
     await foodModel.findOneAndDelete({ _id: id });
     res.json({ result: "Success", message: "Food Deleted" });
   } catch (error) {
