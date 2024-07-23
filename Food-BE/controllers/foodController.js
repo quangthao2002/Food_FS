@@ -1,8 +1,17 @@
 import foodModel from "../models/foodModel.js";
-import fs from "fs";
+import { DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import dotenv from "dotenv";
+dotenv.config();
+
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
 
 // add food item
-
 const addFood = async (req, res) => {
   let image_url = req.file.location; //URL cua anh tren s3
   const food = new foodModel({
@@ -29,14 +38,12 @@ const updateFood = async (req, res) => {
     const food = await foodModel.findOne({ _id: id });
     let image_url = food.image; // nếu không thay đổi sử dụng lại image cũ
     if (req.file) {
-      // Xóa ảnh cũ trên S3 nếu cần
       const oldImageKey = food.image.split("/").pop();
-      await s3
-        .deleteObject({
-          Bucket: process.env.AWS_BUCKET_NAME,
-          Key: oldImageKey,
-        })
-        .promise();
+      const deleteParams = {
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: oldImageKey,
+      };
+      await s3Client.send(new DeleteObjectCommand(deleteParams));
 
       image_url = req.file.location; // URL của ảnh mới trên S3
     }
@@ -56,6 +63,7 @@ const updateFood = async (req, res) => {
     res.json({ result: "Error", message: error.message });
   }
 };
+
 // remove food item
 const removeFood = async (req, res) => {
   const { id } = req.params;
@@ -90,8 +98,8 @@ const allFood = async (req, res) => {
     res.json({ result: "Error", message: error.message });
   }
 };
-// food pagination
 
+// food pagination
 const paginationFood = async (req, res) => {
   const page = req.query.page || 1;
   const limit = req.query.limit || 10;
@@ -101,9 +109,7 @@ const paginationFood = async (req, res) => {
   try {
     const totalItems = await foodModel.countDocuments().exec();
     const totalPages = Math.ceil(totalItems / limit);
-
     const foods = await foodModel.find().limit(limit).skip(startIndex).exec();
-    // page = 4, limit =10, startIndex = 30
     result.data = foods;
     result.totalPages = totalPages;
     result.currentPage = page;
