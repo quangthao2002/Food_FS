@@ -28,3 +28,12 @@ Currently, two official plugins are available:
    ```
 # Application Interface
 Below are some screenshots of the application interface:
+- Home page:
+  ![image](https://github.com/user-attachments/assets/b65f8269-4ea5-4536-8510-0d64c4ee4991)
+
+  ![image](https://github.com/user-attachments/assets/53c203ff-fa29-4981-b20d-174e577b5982)
+
+  ![image](https://github.com/user-attachments/assets/feb293ca-9a05-4e5f-b8a8-1029629612bd)
+
+
+
