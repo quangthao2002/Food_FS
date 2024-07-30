@@ -26,5 +26,5 @@ Currently, two official plugins are available:
    ```sh
    npm run dev
    ```
-   Application Interface
-   Below are some screenshots of the application interface:
+# Application Interface
+Below are some screenshots of the application interface:
