@@ -6,3 +6,25 @@ Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## How to Run the Application
+
+1. Clone the repository:
+
+   ```sh
+   git clone https://github.com/quangthao2002/Food_FS.git
+   cd food-fe
+   ```
+
+2. Install the dependencies:
+
+   ```sh
+   npm install
+   ```
+
+3. Start the development server:
+   ```sh
+   npm run dev
+   ```
+   Application Interface
+   Below are some screenshots of the application interface:

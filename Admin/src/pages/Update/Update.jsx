@@ -122,7 +122,11 @@ const Update = ({ url }) => {
               <option value="Salad">Salad</option>
               <option value="Rolls">Rolls</option>
               <option value="Deserts">Deserts</option>
-              <option value="cake">Cake</option>
+              <option value="Cake">Cake</option>
+              <option value="Sandwich">Sandwich</option>
+              <option value="Pure Veg">Pure Veg</option>Noodles
+              <option value="Pasta">Pasta</option>
+              <option value="Noodles">Noodles</option>
             </select>
           </div>
           <div className="add-price flex-col">

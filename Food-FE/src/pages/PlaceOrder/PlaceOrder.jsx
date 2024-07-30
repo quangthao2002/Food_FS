@@ -9,6 +9,7 @@ import { toast } from "react-hot-toast";
 function PlaceOrder() {
   const [isSelect, setIsSelect] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("cod");
+  console.log(paymentMethod);
   const { getTotalCartAmount, token, foodList, cartItems, url } =
     useContext(StoreContext);
   const [dataUser, setDataUser] = useState({
@@ -27,6 +28,7 @@ function PlaceOrder() {
     const { name, value } = e.target;
     setDataUser({ ...dataUser, [name]: value });
   };
+
   const placeOrder = async (event) => {
     event.preventDefault();
     let orderItems = [];
@@ -40,8 +42,8 @@ function PlaceOrder() {
     const orderData = {
       items: orderItems,
       address: dataUser,
-      amount: getTotalCartAmount() + 2,
-      paymentMethod,
+      amount: getTotalCartAmount(),
+      paymentMethod: paymentMethod,
     };
     const response = await axios.post(
       `${url}/api/order/placeOrder`,
@@ -52,6 +54,7 @@ function PlaceOrder() {
       const { session_url } = response.data;
       window.location.replace(session_url);
     } else if (response.data.paymentMethod === "cod") {
+      toast.success("Order success");
       navigate("/myOrders");
     } else {
       toast.success("Order fail");
@@ -167,6 +170,7 @@ function PlaceOrder() {
           <h2>Payment Method</h2>
           <div className={`payment-option`} onClick={() => setIsSelect(false)}>
             <button
+              type="button"
               className={`${!isSelect ? "selected" : ""}`}
               onClick={() => {
                 setPaymentMethod("cod");
@@ -179,6 +183,7 @@ function PlaceOrder() {
           </div>
           <div className={`payment-option`} onClick={() => setIsSelect(true)}>
             <button
+              type="button"
               className={`${isSelect ? "selected" : ""}`}
               onClick={() => {
                 setPaymentMethod("stripe");
