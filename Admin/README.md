@@ -28,3 +28,7 @@ Currently, two official plugins are available:
    ```
    Application Interface
    Below are some screenshots of the application interface:
+   - Page statistics
+
+     ![image](https://github.com/user-attachments/assets/73cb3ab9-ddc3-4eb9-a5f7-918d417b01c1)
+
