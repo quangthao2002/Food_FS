@@ -42,7 +42,7 @@ function PlaceOrder() {
     const orderData = {
       items: orderItems,
       address: dataUser,
-      amount: getTotalCartAmount() + 2,
+      amount: getTotalCartAmount(),
       paymentMethod: paymentMethod,
     };
     const response = await axios.post(
