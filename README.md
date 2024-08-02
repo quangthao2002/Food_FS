@@ -2,7 +2,7 @@
 
 # You can use the following user account for testing purposes:
 
-**Username**: quangthao22122002@gmail.com
+**Username**: thao2@gmail.com
 
 **Password**: 12345678
 
