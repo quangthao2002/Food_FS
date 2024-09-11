@@ -5,6 +5,7 @@ import { StoreContext } from "../../context/StoreContext";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 const Verify = () => {
+  // eslint-disable-next-line no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
   const success = searchParams.get("success");
   const orderId = searchParams.get("orderId");
@@ -16,8 +17,8 @@ const Verify = () => {
       success,
     });
     if (response.data.success) {
-      navigate("/myOrders");
       toast.success("Order success");
+      navigate("/myOrders");
     } else {
       navigate("/");
     }

@@ -15,8 +15,8 @@ const App = () => {
   return (
     <>
       {showLogin ? <LoginPopup setShowLogin={setShowLogin} /> : <></>}
+      <Navbar setShowLogin={setShowLogin} />
       <div className="app">
-        <Navbar setShowLogin={setShowLogin} />
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/cart" element={<Cart />} />
